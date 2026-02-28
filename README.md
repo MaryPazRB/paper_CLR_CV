@@ -33,8 +33,7 @@ The methodological workflow consists of:
    - 606 curated pixel-level rust lesion masks
    - CLR_SAM_dataset: https://universe.roboflow.com/clr-zky50/sam_clr/dataset/1
    -    DL506: https://universe.roboflow.com/clr-zky50/dl506/dataset/1
-   - 100 independent evaluation masks
-   GoldenStandard: https://universe.roboflow.com/clr-zky50/imgtest-fvn9j/dataset/1
+   - 100 independent validation images: https://universe.roboflow.com/clr-zky50/imgtest-fvn9j/dataset/1
 ---
 
 # 📂 Repository Structure
