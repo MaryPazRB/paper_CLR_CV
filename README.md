@@ -113,6 +113,8 @@ All trained model weights are hosted on Hugging Face:
 
 👉 https://huggingface.co/MaryPazRB/Paper_CLR_CV
 
+Local: 01_models/03_trained_models
+
 This ensures accessibility without exceeding GitHub file size limits.
 
 
