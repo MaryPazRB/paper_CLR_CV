@@ -23,16 +23,18 @@ The methodological workflow consists of:
    - Fine-tuned SAM2 (SAM_CLR)
    - Zero-shot SAM3
 4. **Severity Estimation** – Pixel-based calculation:
-S (%) = Diseased Area / Leaf Area × 100
+   S (%) = Diseased Area / Leaf Area × 100
 
 
 5. **Agreement Analysis** – Lin’s Concordance Correlation Coefficient between predicted and reference severity.
 
-The full dataset comprises:
-- 1,285 field-acquired coffee leaf images
-- 606 curated pixel-level rust lesion masks
-- 100 independent evaluation masks
-
+   The full dataset comprises:
+   - 1,285 field-acquired coffee leaf images
+   - 606 curated pixel-level rust lesion masks
+   CLR_SAM_dataset: https://universe.roboflow.com/clr-zky50/sam_clr/dataset/1
+   DL506: https://universe.roboflow.com/clr-zky50/dl506/dataset/1
+   - 100 independent evaluation masks
+   GoldenStandard: https://universe.roboflow.com/clr-zky50/imgtest-fvn9j/dataset/1
 ---
 
 # 📂 Repository Structure
