@@ -111,7 +111,7 @@ Together, these components allow full reproducibility of segmentation metrics an
 
 All trained model weights are hosted on Hugging Face:
 
-👉 **[INSERT HUGGING FACE LINK]**
+👉 https://huggingface.co/MaryPazRB/Paper_CLR_CV
 
 This ensures accessibility without exceeding GitHub file size limits.
 
