@@ -58,6 +58,8 @@ Models include:
 
 Contains validation binary masks (PNG format) corresponding to segmentation outputs from each evaluated method.
 
+⚠️ Due to GitHub file size limitations, binary images are hosted on Hugging Face.
+
 These masks were used to compute:
 
 - Intersection over Union (IoU)
