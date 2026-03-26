@@ -1,4 +1,6 @@
-# 📄 Data Card — CLR_SAM (Coffee Leaf Rust Segmentation Model) and DL_506 (Deep Lab V3+ for Coffee Leaf Rust)
+# 📄 Data Card — CLR_SAM and DL_506 (Coffee Leaf Rust Segmentation Models)
+
+---
 
 ## 1. Summary
 
@@ -15,7 +17,7 @@
 **Description:**  
 CLR_SAM is a fine-tuned segmentation model based on the Segment Anything Model (SAM2), designed to identify and quantify rust lesions caused by *Hemileia vastatrix* in *Coffea arabica* leaves. The model enables automated estimation of disease severity under heterogeneous field conditions using RGB images.
 
-DL506 is a deeplearning segmentation model based on the DeepLabV3+, designed to identify and quantify rust lesions caused by *Hemileia vastatrix* in *Coffea arabica* leaves. The model enables automated estimation of disease severity under heterogeneous field conditions using RGB images.
+DL_506 is a deep learning segmentation model based on DeepLabV3+, designed to identify and quantify rust lesions caused by *Hemileia vastatrix* in *Coffea arabica* leaves. The model enables automated estimation of disease severity under heterogeneous field conditions using RGB images.
 
 **Primary Outputs:**
 - Binary segmentation masks (diseased vs healthy tissue)
@@ -27,8 +29,8 @@ DL506 is a deeplearning segmentation model based on the DeepLabV3+, designed to 
 
 - **Creators:** Mary Paz Romero Benavides et al.  
 - **Affiliation:** Universidade Federal de Viçosa (UFV), EPAMIG Sudeste  
-- **Contact:** *emdelponte@ufv.br*  
-- **Funding:** *CAPES, FAPEMIG, CNPQ*  
+- **Contact:** emdelponte@ufv.br  
+- **Funding:** CAPES, FAPEMIG, CNPQ  
 
 ---
 
@@ -76,7 +78,7 @@ Accurate estimation of coffee leaf rust severity is critical for:
 - Resistance screening
 - Agricultural decision-making
 
-Visual assessment is subjective and prone to error. CLR_SAM aims to:
+Visual assessment is subjective and prone to error. CLR_SAM and DL_506 aim to:
 - Reduce observer bias
 - Improve reproducibility
 - Enable scalable and automated severity estimation
@@ -104,8 +106,7 @@ Data were collected in Minas Gerais, Brazil:
 - Araponga
 - Oratórios
 - Leopoldina
-- Ervália
-(Refer to the paper)
+- Ervália  
 
 ### Collection Method
 
@@ -131,23 +132,101 @@ Data were collected in Minas Gerais, Brazil:
 
 ### Pipeline
 
-1. Leaf detection (YOLOv8)
-2. Leaf segmentation (SAM2)
-3. Lesion segmentation (CLR_SAM)
-4. Severity estimation
+1. Leaf detection (YOLOv8)  
+2. Leaf segmentation (SAM2)  
+3. Lesion segmentation (CLR_SAM or DL_506)  
+4. Severity estimation  
 
 ### Severity Calculation
 
-S (%) = (Diseased Area / Leaf Area) × 100
+S (%) = (Diseased Area / Leaf Area) × 100  
+
+---
 
 ### Model Details
 
-- Base model: SAM2 (Hiera backbone)
-- Fine-tuning dataset: 100 annotated images
-- Training:
-  - 20 epochs
-  - Batch size: 2
-  - Frozen encoder
+#### **CLR_SAM (SAM2 Fine-Tuned Model)**
+
+- Base model: SAM2 (Hiera Tiny backbone)
+- Framework: PyTorch + SAM2
+- Input size: up to 1024 px (aspect-ratio preserved)
+- Training dataset: 100 manually annotated images
+- Data split: 80% training / 20% test
+
+**Training configuration:**
+- Training steps: 6,000  
+- Effective batch size: ~8 (gradient accumulation = 8)  
+- Optimizer: AdamW  
+- Learning rate: 5e-5  
+- Weight decay: 1e-4  
+- LR scheduler: StepLR  
+  - Step size: 2,000  
+  - Gamma: 0.6  
+- Mixed precision: Yes (AMP + GradScaler)  
+- Gradient clipping: max norm = 1.0  
+
+**Loss function:**
+- Binary Cross-Entropy (segmentation)
+- IoU-based score regression loss  
+- Final loss: segmentation loss + 0.05 × score loss  
+
+**Prompting strategy:**
+- Up to 5 point prompts per image  
+- Points sampled from eroded lesion regions  
+- All prompts labeled as foreground  
+
+**Training strategy:**
+- Image encoder frozen  
+- Fine-tuned modules:
+  - Mask decoder  
+  - Prompt encoder  
+- Random sample per step (no fixed batching)  
+
+**Preprocessing:**
+- Resize with aspect ratio preservation  
+- Binary mask conversion  
+- Morphological erosion for point selection  
+
+**Checkpointing:**
+- Model saved every 500 steps  
+
+---
+
+#### **DL_506 (DeepLabV3+)**
+
+- Base model: DeepLabV3+ (encoder–decoder CNN)
+- Encoder: ResNet-50 (ImageNet pretrained)
+- Input size: 512 × 512
+- Training dataset: 506 annotated images
+
+**Training configuration:**
+- Epochs: 25  
+- Batch size: 8  
+- Optimizer: AdamW  
+- Learning rate: 1e-4  
+
+**Loss function:**
+- Dice Loss (binary)
+- Binary Cross-Entropy (BCEWithLogitsLoss)
+- Combined loss: Dice + BCE  
+
+**Data augmentation:**
+- Horizontal flip (p = 0.5)  
+- Vertical flip (p = 0.5)  
+
+**Normalization:**
+- Mean: [0.485, 0.456, 0.406]  
+- Std: [0.229, 0.224, 0.225]  
+
+**Training strategy:**
+- Fully supervised segmentation  
+- Binary classification (lesion vs background)  
+- Best model selected via validation loss  
+
+**Implementation details:**
+- Framework: PyTorch + segmentation_models_pytorch  
+- Checkpointing: best and final models saved  
+- Hardware: GPU recommended  
 
 ---
 
@@ -155,15 +234,15 @@ S (%) = (Diseased Area / Leaf Area) × 100
 
 ### Pixel-Level Performance
 
-- Dice ≈ 0.91
-- IoU ≈ 0.83
-- Precision ≈ 0.93
-- Recall ≈ 0.94
+- Dice ≈ 0.91  
+- IoU ≈ 0.83  
+- Precision ≈ 0.93  
+- Recall ≈ 0.94  
 
 ### Leaf-Level Agreement
 
-- High concordance with reference severity
-- Reduced bias compared to classical methods
+- High concordance with reference severity  
+- Reduced bias compared to classical methods  
 
 ---
 
@@ -172,9 +251,9 @@ S (%) = (Diseased Area / Leaf Area) × 100
 ### Domain Shift
 
 Performance may decrease under:
-- Different lighting conditions
-- New geographic regions
-- Different cultivars
+- Different lighting conditions  
+- New geographic regions  
+- Different cultivars  
 
 **Mitigation:**  
 Training includes diverse field conditions; fine-tuning recommended.
@@ -193,36 +272,36 @@ Expert validation and independent evaluation dataset.
 ### Segmentation Errors
 
 Confusion may occur with:
-- Leaf senescence
-- Shadows or background artifacts
+- Leaf senescence  
+- Shadows or background artifacts  
 
 ---
 
 ### Computational Requirements
 
-- GPU recommended for training and inference
+- GPU recommended for training and inference  
 
 ---
 
 ## 9. Ethical Considerations
 
-- No personal or sensitive human data
-- Supports agricultural research and smallholder systems
-- Low risk of misuse
+- No personal or sensitive human data  
+- Supports agricultural research  
+- Low risk of misuse  
 
 ---
 
 ## 10. Access & Maintenance
 
-- **Repository:** *https://github.com/MaryPazRB/paper_CLR_CV*  
-- **License:** *MIT*  
-- **Maintenance:** Actively maintained
+- **Repository:** https://github.com/MaryPazRB/paper_CLR_CV  
+- **License:** MIT  
+- **Maintenance:** Actively maintained  
 
 ### Future Improvements
 
-- Expanded annotation dataset
-- Multi-disease support
-- Mobile deployment optimization
+- Expanded annotation dataset  
+- Multi-disease support  
+- Mobile deployment optimization  
 
 ---
 
@@ -230,13 +309,9 @@ Confusion may occur with:
 
 ### Compatible With
 
-- Other plant disease datasets
-- Agronomic and environmental datasets
+- Other plant disease datasets  
+- Agronomic and environmental datasets  
 
 ### Use with Caution
 
-- Different imaging modalities (e.g., hyperspectral)
-
-- Designed for real-world field conditions
-- Emphasis on robustness and scalability
-- Suitable for integration into automated pipelines
+- Different imaging modalities (e.g., hyperspectral)  
