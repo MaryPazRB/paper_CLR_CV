@@ -20,8 +20,8 @@ CLR_SAM is a fine-tuned segmentation model based on the Segment Anything Model (
 
 - **Creators:** Mary Paz Romero Benavides et al.  
 - **Affiliation:** Universidade Federal de Viçosa (UFV), EPAMIG Sudeste  
-- **Contact:** *(add email here)*  
-- **Funding:** *(add if applicable)*  
+- **Contact:** *emdelponte@ufv.br*  
+- **Funding:** *CAPES, FAPEMIG, CNPQ*  
 
 ---
 
@@ -98,6 +98,7 @@ Data were collected in Minas Gerais, Brazil:
 - Oratórios
 - Leopoldina
 - Ervália
+(Refer to the paper)
 
 ### Collection Method
 
@@ -206,9 +207,9 @@ Confusion may occur with:
 
 ## 10. Access & Maintenance
 
-- **Repository:** *(add GitHub link)*  
-- **License:** *(e.g., MIT, CC-BY 4.0)*  
-- **Maintenance:** Actively maintained (recommended)
+- **Repository:** *https://github.com/MaryPazRB/paper_CLR_CV*  
+- **License:** *MIT*  
+- **Maintenance:** Actively maintained
 
 ### Future Improvements
 
