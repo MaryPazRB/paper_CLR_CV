@@ -1,4 +1,4 @@
-# 📄 Data Card — CLR_SAM (Coffee Leaf Rust Segmentation Model)
+# 📄 Data Card — CLR_SAM (Coffee Leaf Rust Segmentation Model) and DL_506 (Deep Lab V3+ for Coffee Leaf Rust)
 
 ## 1. Summary
 
@@ -7,8 +7,15 @@
 **Type:** Image dataset + segmentation model  
 **Task:** Pixel-level segmentation for disease severity estimation  
 
+**Name:** DL_506  
+**Version:** v1.0  
+**Type:** Image dataset + segmentation model  
+**Task:** Pixel-level segmentation for disease severity estimation  
+
 **Description:**  
 CLR_SAM is a fine-tuned segmentation model based on the Segment Anything Model (SAM2), designed to identify and quantify rust lesions caused by *Hemileia vastatrix* in *Coffea arabica* leaves. The model enables automated estimation of disease severity under heterogeneous field conditions using RGB images.
+
+DL506 is a deeplearning segmentation model based on the DeepLabV3+, designed to identify and quantify rust lesions caused by *Hemileia vastatrix* in *Coffea arabica* leaves. The model enables automated estimation of disease severity under heterogeneous field conditions using RGB images.
 
 **Primary Outputs:**
 - Binary segmentation masks (diseased vs healthy tissue)
@@ -229,10 +236,6 @@ Confusion may occur with:
 ### Use with Caution
 
 - Different imaging modalities (e.g., hyperspectral)
-
----
-
-## 12. Additional Notes
 
 - Designed for real-world field conditions
 - Emphasis on robustness and scalability
